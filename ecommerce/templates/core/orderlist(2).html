@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+{% load static %}
+{% load cart_template_tag %}
+<html lang="en">
+<!-- Basic -->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Site Metas -->
+    <title>Freshshop - Ecommerce Bootstrap 4 HTML Template</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="{% static 'assests/images/favicon.ico' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{% static 'assests/images/apple-touch-icon.png' %}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'assests/css/bootstrap.min.css' %}">
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="{% static 'assests/css/style.css' %}">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{% static 'assests/css/responsive.css' %}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'assests/css/custom.css' %}">
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <!-- Start Main Top -->
+    <!-- Erased -->
+    <!-- End Main Top -->
+
+    <!-- Start Main Top -->
+    <header class="main-header">
+        <!-- Start Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-default bootsnav">
+            <div class="container">
+                <!-- Start Header Navigation -->
+                <div class="navbar-header">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+                    <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'assests/images/logo.png' %}" class="logo" alt=""></a>
+                </div>
+                <!-- End Header Navigation -->
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
+                      <li><a class="getstarted scrollto" href="{% url 'index'%}">Home</a></li>
+                        <li><a class="getstarted scrollto" href="{% url 'about'%}">About</a></li>
+                        <li><a class="getstarted scrollto" href="{% url 'contact'%}">Contact</a></li>
+                        {% if user.is_authenticated %}
+            
+           
+            {% if user.is_superuser %}
+            <li><a class="getstarted scrollto" href="{% url 'add_product' %}">Add Product</a></li>
+            {% endif %}
+            <li><a class="getstarted scrollto" href="{% url 'orderlist' %}">Cart&nbsp;&nbsp;{{request.user | cart_item_count }}
+            </a></li>
+            <li class="nav-item active">
+              <a class="getstarted scrollto" href="{% url 'orders' %}">My Orders <span class="sr-only">(current)</span></a>
+            </li>
+            <li><a class="getstarted scrollto" href="#hero">Welcome {{user.username}}</a></li>
+            <li><a class="getstarted scrollto" href="{% url 'user_logout' %}">Logout</a></li>
+
+           
+
+            {% else %}
+            <li><a class="getstarted scrollto" href="{% url 'user_login' %}">Login</a></li>
+            <li><a class="getstarted scrollto" href="{% url 'user_register' %}">Register</a></li>
+            {% endif %}
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+
+                <!-- Start Atribute Navigation -->
+                <!-- Erased -->
+                <!-- End Atribute Navigation -->
+            </div>
+            <!-- Start Side Menu -->
+            <!-- Erased -->
+            <!-- End Side Menu -->
+        </nav>
+        <!-- End Navigation -->
+    </header>
+    
+    
+  
+      
+        <div class="container">
+          <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Item Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total Item Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order_item in order.items.all %}
+              <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{ order_item.product.name }}</td>
+                <td>Rs. {{ order_item.product.price }}</td>
+                <td>
+                  <a href="{% url 'add_item' order_item.product.pk %}">+</a> &nbsp;
+                  {{ order_item.quantity }} &nbsp;
+                  <a href="{% url 'remove_item' order_item.product.pk %}">-</i></a>
+  
+                </td>
+                <td>Rs. {{ order_item.get_total_item_price}}</td>
+              </tr>
+              {% empty %}
+              <tr class="row100 body">
+                <td class="cell100 column1">Your Cart is Empty</td>
+                
+              </tr>
+              {% endfor %}
+  
+            
+              {% if order.get_total_price %}
+              <tr class="row100 body" style="background-color:#191919;
+                ">
+                <td class="cell100 column1" style="color:white;"><b>Total Order Price</b></td>
+                <td class="cell100 column2"></td>
+                <td class="cell100 column3"></td>
+                <td class="cell100 column4"></td>
+                <td class="cell100 column5" style="color:white;"><i class="fas fa-rupee-sign"></i> Rs. {{order.get_total_price}}</td>
+              </tr>
+              <tr class="row100 body">
+                <td class="cell100 column1">
+              <tr class="row100 body text-center">
+                  
+                </td>
+              </tr>
+              
+  
+              {% endif %}
+              
+  
+              
+              <div class="text-center mb-3">
+                <a href="{% url 'checkout_page' %}" class="btn btn-warning float-right ml-2 ">Checkout</a>
+              <a href="/" class="btn btn-primary float-right">Continue Shopping</a>
+              </div>
+          </table>
+          
+        </div>
+        
+      </section>
+
+    <!-- Start Footer  -->
+    
+    <!-- End Footer  -->
+
+    <!-- Start copyright  -->
+    
+    <!-- End copyright  -->
+
+    <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+
+    <!-- ALL JS FILES -->
+    <script src="{% static 'assests/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'assests/js/popper.min.js' %}"></script>
+    <script src="{% static 'assests/js/bootstrap.min.js' %}"></script>
+    <!-- ALL PLUGINS -->
+    <script src="{% static 'assests/js/jquery.superslides.min.js' %}"></script>
+    <script src="{% static 'assests/js/bootstrap-select.js' %}"></script>
+    <script src="{% static 'assests/js/inewsticker.js' %}"></script>
+    <script src="{% static 'assests/js/bootsnav.js' %}"></script>
+    <script src="{% static 'assests/js/images-loded.min.js' %}"></script>
+    <script src="{% static 'assests/js/isotope.min.js' %}"></script>
+    <script src="{% static 'assests/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'assests/js/baguetteBox.min.js' %}"></script>
+    <script src="{% static 'assests/js/form-validator.min.js' %}"></script>
+    <script src="{% static 'assests/js/contact-form-script.js' %}"></script>
+    <script src="{% static 'assests/js/custom.js' %}"></script>
+</body>
+
+</html>
